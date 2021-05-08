@@ -139,7 +139,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="reactant.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\vessel_t.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="reactant.h" />
+    <ClInclude Include="src\vessel_t.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
