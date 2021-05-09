@@ -4,6 +4,11 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <sstream>
+#include "node.h"
+#include <fstream>
+#include <string>
+#include <iostream>
 
 class vessel_t
 {
@@ -38,16 +43,74 @@ public:
 	};
 
 	// Build Graph
-	friend std::string buildReactionGraph() {
-		std::string output;
+	std::string buildReactionGraph() {
+		std::vector<node> nodes;
+		std::string output = "digraph {";
+		std::string s = "s";
+		std::string r = "r";
+		int i = 0;
+
+		for (const auto& reactant : reactants)
+		{
+			std::string nodeId = "s";
+			nodeId.append(std::to_string(i));
+			nodes.push_back(node{ reactant.getQuanitity(), nodeId, reactant.getIdentifier() });
+			output.append(buildNodeString(s, i, reactant.getIdentifier(), "cyan", "box"));
+			i++;
+		}
+
+		output.append(buildRuleString(nodes, r, "yellow", "oval"));
+		output.append("}");
 		
+		std::ofstream file("graph.dot");
+		file << output;
+
 		return output;
 	}
-	
-	friend std::string buildNode(int labelNumber, std::string label, std::string fillcolor, std::string shape) {
-		std::string nodeString = "s0[label=\"S\",shape=\"box\",style=\"filled\",fillcolor=\"cyan\"];";
-		std::string message = std::format("The answer is {}.", 42);
-		return nodeString;
+
+	// Helper for build graph
+	std::string buildNodeString(std::string graphId, int labelNumber, std::string label, std::string fillcolor, std::string shape) {
+
+		std::string nodeId = graphId;
+		nodeId.append(std::to_string(labelNumber));
+		std::stringstream nodeString;
+
+		nodeString << nodeId << "[label=\"" << label << "\",shape=\"" << shape << "\",style=\"filled\",fillcolor=\"" << fillcolor << "\"];" << std::endl;
+		return nodeString.str();
+	};
+
+	// Helper for build graph
+	std::string buildRuleString(std::vector<node> nodes, std::string graphId, std::string fillcolor, std::string shape) {
+
+		std::stringstream nodeString;
+		int i = 0;
+
+		for (auto& rule : rules)
+		{
+			std::string nodeIdentifier = graphId;
+			nodeIdentifier.append(std::to_string(i));
+			nodeString << nodeIdentifier << "[label=\"" << rule.getTime() << "\",shape=\"" << shape << "\",style=\"filled\",fillcolor=\"" << fillcolor << "\"];" << std::endl;
+			for (auto& reactant : rule.getInput())
+			{
+				for (auto& node : nodes) {
+					if (node.reactant_identifier == reactant.getIdentifier()) {
+						nodeString << node.node_identifier << " -> " << nodeIdentifier << std::endl;
+					}
+				}
+			}
+
+			for (auto& reactant : rule.getOutput())
+			{
+				for (auto& node : nodes) {
+					if (node.reactant_identifier == reactant.getIdentifier()) {
+						nodeString << nodeIdentifier << " -> " << node.node_identifier << std::endl;
+					}
+				}
+			}
+			i++;
+		}
+
+		return nodeString.str();
 	};
 
 private:
@@ -55,5 +118,7 @@ private:
 	std::vector<reactant> env;
 	std::vector<rule> rules;
 };
+
+
 
 

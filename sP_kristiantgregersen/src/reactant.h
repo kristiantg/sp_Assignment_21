@@ -27,5 +27,12 @@ public:
 		t.push_back(output);
 		return t;
 	}
+
+	std::string getIdentifier() const {
+		return _identifier;
+	}
+	int getQuanitity() const {
+		return _quantity;
+	}
 };
 

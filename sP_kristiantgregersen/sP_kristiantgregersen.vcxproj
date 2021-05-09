@@ -88,6 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -139,15 +140,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\node.cpp" />
     <ClCompile Include="src\rule.cpp" />
     <ClCompile Include="src\reactant.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\vessel_t.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\node.h" />
     <ClInclude Include="src\rule.h" />
     <ClInclude Include="src\reactant.h" />
     <ClInclude Include="src\vessel_t.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
