@@ -13,12 +13,19 @@ public:
 	reactant() = default;
 	reactant(std::string identifier, int initial_quantity) : _identifier(identifier), _quantity(initial_quantity) {}
 
-	friend std::vector<reactant> operator+(std::vector<reactant> lhs, std::vector<reactant> const& rhs) {
-		return std::vector<reactant>{(rhs, lhs)};
+	friend std::vector<reactant> operator+(std::vector<reactant> const& lhs, std::vector<reactant> const& rhs) {
+		std::vector<reactant> t;
+		t.push_back(rhs.front());
+		t.push_back(lhs.front());
+		return t;
 	};
 
+	// LHS : Input, RHS : Output of '>>='
 	friend std::vector<std::vector<reactant>> operator>>=(std::vector<reactant> input, std::vector<reactant> const& output) {
-		return std::vector<std::vector<reactant>>{(input, output)};
+		std::vector<std::vector<reactant>> t;
+		t.push_back(input);
+		t.push_back(output);
+		return t;
 	}
 };
 

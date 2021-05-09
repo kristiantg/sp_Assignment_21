@@ -3,6 +3,7 @@
 #include "rule.h"
 #include <string>
 #include <vector>
+#include <iostream>
 
 class vessel_t
 {
@@ -15,6 +16,7 @@ public:
 
 	// Initalize Reactant
 	std::vector<reactant> operator()(std::string reactant_identifier, int quantity) {
+		reactants.push_back(reactant(reactant_identifier, quantity));
 		return std::vector<reactant>{reactant(reactant_identifier, quantity)};
 	};
 
@@ -23,11 +25,15 @@ public:
 		return env;
 	};
 
+	// Constructor for rule
 	rule operator()(const std::vector<std::vector<reactant>>& reaction_pair, double time) {
+		rules.push_back(rule{ reaction_pair.front(), reaction_pair.back(), time });
 		return rule{ reaction_pair.front(), reaction_pair.back(), time };
 	};
 
+	// Secondary constructor for rule
 	rule operator()(const std::vector<std::vector<reactant>>& reaction_pair, const std::vector<reactant> catalyst, double time) {
+		rules.push_back(rule{ reaction_pair.front(), reaction_pair.back(), catalyst, time });
 		return rule{reaction_pair.front(), reaction_pair.back(), catalyst, time};
 	};
 
@@ -36,3 +42,5 @@ private:
 	std::vector<reactant> env;
 	std::vector<rule> rules;
 };
+
+

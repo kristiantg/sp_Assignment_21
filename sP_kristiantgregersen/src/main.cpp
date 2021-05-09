@@ -1,9 +1,5 @@
-#include "vessel_t.h";
-
-int main() 
-{  
-   	return 1;
-}
+#include "vessel_t.h"
+#include <iostream>
 
 vessel_t circadian_oscillator2() {
     auto alphaA = 50.0;
@@ -49,4 +45,10 @@ vessel_t circadian_oscillator2() {
     v(MA >>= env, deltaMA);
     v(MR >>= env, deltaMR);
     return v;
+}
+
+int main() 
+{ 
+    vessel_t t;
+    t = circadian_oscillator2();
 }
