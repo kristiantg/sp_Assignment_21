@@ -1,17 +1,13 @@
 #pragma once
-#include "../reactant.h"
+#include "reactant.h"
+#include "rule.h"
 #include <string>
 #include <vector>
-#include "../reaction_rule.h"
 
 class vessel_t
 {
 public:
 	vessel_t() = default;
-
-	std::vector<reactant> reactants;
-	std::vector<reactant> env;
-	//std::vector<reaction_rule> rules;
 
 	std::vector<reactant> environment() {
 		return env;
@@ -27,14 +23,16 @@ public:
 		return env;
 	};
 
-	std::vector<reactant> operator()(const std::vector<std::vector<reactant>>& reaction_pair, double time) {
-		return env;
+	rule operator()(const std::vector<std::vector<reactant>>& reaction_pair, double time) {
+		return rule{ reaction_pair.front(), reaction_pair.back(), time };
 	};
 
-	std::vector<reactant> operator()(const std::vector<std::vector<reactant>>& reaction_pair, const std::vector<reactant> catalyst, double time) {
-		return env;
+	rule operator()(const std::vector<std::vector<reactant>>& reaction_pair, const std::vector<reactant> catalyst, double time) {
+		return rule{reaction_pair.front(), reaction_pair.back(), catalyst, time};
 	};
 
 private:
-
+	std::vector<reactant> reactants;
+	std::vector<reactant> env;
+	std::vector<rule> rules;
 };

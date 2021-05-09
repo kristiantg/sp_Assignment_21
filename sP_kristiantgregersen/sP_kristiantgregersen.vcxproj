@@ -139,14 +139,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="reactant.cpp" />
-    <ClCompile Include="reaction_rule.cpp" />
+    <ClCompile Include="src\rule.cpp" />
+    <ClCompile Include="src\reactant.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\vessel_t.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="reactant.h" />
-    <ClInclude Include="reaction_rule.h" />
+    <ClInclude Include="src\rule.h" />
+    <ClInclude Include="src\reactant.h" />
     <ClInclude Include="src\vessel_t.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

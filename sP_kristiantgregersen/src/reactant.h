@@ -2,7 +2,6 @@
 #include <list>
 #include <string>
 #include <vector>
-#include "reaction_rule.h"
 
 class reactant
 {

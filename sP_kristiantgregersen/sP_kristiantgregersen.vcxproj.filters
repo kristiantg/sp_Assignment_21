@@ -21,10 +21,10 @@
     <ClCompile Include="src\vessel_t.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="reactant.cpp">
+    <ClCompile Include="src\reactant.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="reaction_rule.cpp">
+    <ClCompile Include="src\rule.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -32,10 +32,10 @@
     <ClInclude Include="src\vessel_t.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="reactant.h">
+    <ClInclude Include="src\reactant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="reaction_rule.h">
+    <ClInclude Include="src\rule.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
