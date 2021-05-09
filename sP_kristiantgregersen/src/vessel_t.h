@@ -32,9 +32,22 @@ public:
 	};
 
 	// Secondary constructor for rule
-	rule operator()(const std::vector<std::vector<reactant>>& reaction_pair, const std::vector<reactant> catalyst, double time) {
-		rules.push_back(rule{ reaction_pair.front(), reaction_pair.back(), catalyst, time });
-		return rule{reaction_pair.front(), reaction_pair.back(), catalyst, time};
+	rule operator()(const std::vector<std::vector<reactant>>& reactio_input_output, const std::vector<reactant> catalyst, double time) {
+		rules.push_back(rule{ reactio_input_output.front(), reactio_input_output.back(), catalyst, time });
+		return rule{ reactio_input_output.front(), reactio_input_output.back(), catalyst, time};
+	};
+
+	// Build Graph
+	friend std::string buildReactionGraph() {
+		std::string output;
+		
+		return output;
+	}
+	
+	friend std::string buildNode(int labelNumber, std::string label, std::string fillcolor, std::string shape) {
+		std::string nodeString = "s0[label=\"S\",shape=\"box\",style=\"filled\",fillcolor=\"cyan\"];";
+		std::string message = std::format("The answer is {}.", 42);
+		return nodeString;
 	};
 
 private:
