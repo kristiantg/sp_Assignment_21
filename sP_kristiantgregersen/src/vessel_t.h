@@ -1,76 +1,39 @@
 #pragma once
 #include "../reactant.h"
 #include <string>
-#include <list>
+#include <vector>
+#include "../reaction_rule.h"
 
 class vessel_t
 {
 public:
+	vessel_t() = default;
 
-	vessel_t();
+	std::vector<reactant> reactants;
+	std::vector<reactant> env;
+	//std::vector<reaction_rule> rules;
 
-	std::list<reactant> environment() {
-		return std::list<reactant>();
+	std::vector<reactant> environment() {
+		return env;
 	};
 
-	vessel_t circadian_oscillator()
-	{
-		auto alphaA = 50.0;
-		auto alpha_A = 500.0;
-		auto alphaR = 0.01;
-		auto alpha_R = 50.0;
-		auto betaA = 50.0;
-		auto betaR = 5.0;
-		auto gammaA = 1.0;
-		auto gammaR = 1.0;
-		auto gammaC = 2.0;
-		auto deltaA = 1.0;
-		auto deltaR = 0.2;
-		auto deltaMA = 10.0;
-		auto deltaMR = 0.5;
-		auto thetaA = 50.0;
-		auto thetaR = 100.0;
-		auto v = vessel_t{};
-		auto env = v.environment();
-		auto DA = v("DA", 1);
-		auto D_A = v("D_A", 0);
-		auto DR = v("DR", 1);
-		auto D_R = v("D_R", 0);
-		auto MA = v("MA", 0);
-		auto MR = v("MR", 0);
-		auto A = v("A", 0);
-		auto R = v("R", 0);
-		auto C = v("C", 0);
-		v(A + DA >>= D_A, gammaA);
-		v(D_A >>= DA + A, thetaA);
-		v(A + DR >>= D_R, gammaR);
-		v(D_R >>= DR + A, thetaR);
-		v(D_A >>= MA + D_A, alpha_A);
-		v(DA >>= MA + DA, alphaA);
-		v(D_R >>= MR + D_R, alpha_R);
-		v(DR >>= MR + DR, alphaR);
-		v(MA >>= MA + A, betaA);
-		v(MR >>= MR + R, betaR);
-		v(A + R >>= C, gammaC);
-		v(C >>= R, deltaA);
-		v(A >>= env, deltaA);
-		v(R >>= env, deltaR);
-		v(MA >>= env, deltaMA);
-		v(MR >>= env, deltaMR);
-		return v;
+	// Initalize Reactant
+	std::vector<reactant> operator()(std::string reactant_identifier, int quantity) {
+		return std::vector<reactant>{reactant(reactant_identifier, quantity)};
 	};
 
-	reactant operator()(const reactant& a, double time) {
-		return a;
+	// Constructor with environment, reactants and time
+	std::vector<reactant> operator()(const std::vector<reactant>& env, const std::vector<reactant> reactants, double time) {
+		return env;
 	};
 
-	reactant operator()(std::string reactant_identifier, uint_least32_t quantity) {
-		
+	std::vector<reactant> operator()(const std::vector<std::vector<reactant>>& reaction_pair, double time) {
+		return env;
 	};
 
-	reactant operator()(const reactant& a, const std::list<reactant> b, double time) {
-
-	}
+	std::vector<reactant> operator()(const std::vector<std::vector<reactant>>& reaction_pair, const std::vector<reactant> catalyst, double time) {
+		return env;
+	};
 
 private:
 

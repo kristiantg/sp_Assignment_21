@@ -24,12 +24,18 @@
     <ClCompile Include="reactant.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="reaction_rule.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\vessel_t.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="reactant.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="reaction_rule.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
