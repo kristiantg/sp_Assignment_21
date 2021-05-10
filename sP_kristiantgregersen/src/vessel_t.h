@@ -42,13 +42,17 @@ public:
 		return rule{ reactio_input_output.front(), reactio_input_output.back(), catalyst, time};
 	};
 
+	std::string printReactions() {
+
+	}
+
 	// Build Graph
 	std::string buildReactionGraph() {
 		std::vector<node> nodes;
 		std::string output = "digraph {";
-		std::string s = "s";
-		std::string r = "r";
-		int i = 0;
+		auto s = "s";
+		auto r = "r";
+		auto i = 0;
 
 		for (const auto& reactant : reactants)
 		{
@@ -87,7 +91,7 @@ public:
 
 		for (auto& rule : rules)
 		{
-			std::string nodeIdentifier = graphId;
+			auto nodeIdentifier = graphId;
 			nodeIdentifier.append(std::to_string(i));
 			nodeString << nodeIdentifier << "[label=\"" << rule.getTime() << "\",shape=\"" << shape << "\",style=\"filled\",fillcolor=\"" << fillcolor << "\"];" << std::endl;
 
@@ -95,7 +99,7 @@ public:
 			{
 				for (auto& node : nodes) {
 					if (node.reactant_identifier == reactant.getIdentifier()) {
-						nodeString << node.node_identifier << " -> " << nodeIdentifier << std::endl;
+						nodeString << node.node_identifier << " -> " << nodeIdentifier << "[arrowhead=\"tee\"];"  << std::endl;
 					}
 				}
 			}
