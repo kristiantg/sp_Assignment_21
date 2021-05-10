@@ -18,6 +18,10 @@ public:
 		return output_reactants;
 	};
 
+	std::vector<reactant> const getCatalysts() {
+		return catalysts;
+	};
+
 	std::vector<reactant> const getInput() {
 		return input_reactants;
 	};

@@ -37,7 +37,7 @@ public:
 	};
 
 	// Secondary constructor for rule
-	rule operator()(const std::vector<std::vector<reactant>>& reactio_input_output, const std::vector<reactant> catalyst, double time) {
+	rule operator()(const std::vector<std::vector<reactant>>& reactio_input_output, const std::vector<reactant>& catalyst, double time) {
 		rules.push_back(rule{ reactio_input_output.front(), reactio_input_output.back(), catalyst, time });
 		return rule{ reactio_input_output.front(), reactio_input_output.back(), catalyst, time};
 	};
@@ -90,6 +90,16 @@ public:
 			std::string nodeIdentifier = graphId;
 			nodeIdentifier.append(std::to_string(i));
 			nodeString << nodeIdentifier << "[label=\"" << rule.getTime() << "\",shape=\"" << shape << "\",style=\"filled\",fillcolor=\"" << fillcolor << "\"];" << std::endl;
+
+			for (auto& reactant : rule.getCatalysts())
+			{
+				for (auto& node : nodes) {
+					if (node.reactant_identifier == reactant.getIdentifier()) {
+						nodeString << node.node_identifier << " -> " << nodeIdentifier << std::endl;
+					}
+				}
+			}
+
 			for (auto& reactant : rule.getInput())
 			{
 				for (auto& node : nodes) {
