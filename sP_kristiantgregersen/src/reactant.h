@@ -14,7 +14,7 @@ private:
 
 public:
 	reactant() = default;
-	reactant(string identifier, int initial_quantity) : _identifier(identifier), _quantity(initial_quantity) {}
+	reactant(string identifier, int quantity) : _identifier(identifier), _quantity(quantity) {}
 
 	friend vector<reactant> operator+(vector<reactant> lhs, vector<reactant> rhs) {
 		vector<reactant> reactant;

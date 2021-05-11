@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include "../StochasticSimulator.h"
+#include "../SymbolTable.h"
 
 vessel_t seihr(uint32_t N)
 {
@@ -153,9 +154,18 @@ private:
 
 int main() 
 { 
-
+    reactant testReactor = reactant{ "hey", 1 };
+    reactant testReactor1 = reactant{ "te", 2 };
+    SymbolTable<reactant> table = SymbolTable{ table };
+    table.insertIntoTable(testReactor);
+    table.insertIntoTable(testReactor1);
+    auto test2 = table.lookupTable("te");
+    auto test3 = table.lookupTable("ik");
+  
+    
     StochasticSimulator simulator;
-    auto tester = seihr(pow(10, 4));
+    //auto tester = seihr(pow(10, 4));
+    auto tester = circadian_oscillator();
     std::cout << tester.buildReactionGraph() << std::endl;
 
     int oscilator = 0;
@@ -169,7 +179,7 @@ int main()
     std::cout << std::endl;
     {
         Timer timer;
-        for (size_t i = 0; i < 8; i++)
+        for (size_t i = 0; i < 2; i++)
         {
             simulator.doStochaticSimulation(100, tester.getReactants(), tester.getReactionRules(), 0);
         }
