@@ -2,6 +2,7 @@
 #include <iostream>
 #include <sstream>
 #include <string>
+#include "../StochasticSimulator.h"
 
 vessel_t seihr(uint32_t N)
 {
@@ -122,11 +123,55 @@ vessel_t circadian_oscillator2() {
     v(MR >>= env, deltaMR);
     return v;
 }
+// RAII
+class Timer {
+public:
+    Timer() {
+        m_StartTimepoint = std::chrono::high_resolution_clock::now();
+    }
+
+    ~Timer() {
+        Stop();
+    }
+
+    void Stop() {
+        auto endTimepoint = std::chrono::high_resolution_clock::now();
+
+        auto start = std::chrono::time_point_cast<std::chrono::microseconds>(m_StartTimepoint).time_since_epoch().count();
+        auto end = std::chrono::time_point_cast<std::chrono::microseconds>(endTimepoint).time_since_epoch().count();
+
+        auto duration = end - start;
+        double ms = duration * 0.001;
+
+        std::cout << duration << "us\n";
+        std::cout << ms << "ms\n";
+    }
+
+private:
+    std::chrono::time_point<std::chrono::high_resolution_clock> m_StartTimepoint;
+};
 
 int main() 
 { 
-    vessel_t t; // Default constructor, allocated on the stack
-    t = circadian_oscillator2();
-    std::cout << t.buildReactionGraph() << std::endl;
-    //t.doStochaticSimulation(100000);
+
+    StochasticSimulator simulator;
+    auto tester = seihr(pow(10, 4));
+    std::cout << tester.buildReactionGraph() << std::endl;
+
+    int oscilator = 0;
+    int oscilator2 = 1;
+    int seihr = 2;
+
+    {
+        Timer timer;
+        simulator.doMultithreadedStochaticSimulation(100, tester.getReactants(), tester.getReactionRules(), 0);
+    }
+    std::cout << std::endl;
+    {
+        Timer timer;
+        for (size_t i = 0; i < 8; i++)
+        {
+            simulator.doStochaticSimulation(100, tester.getReactants(), tester.getReactionRules(), 0);
+        }
+    }
 }

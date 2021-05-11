@@ -45,16 +45,22 @@ public:
 		return rule{ reactio_input_output.front(), reactio_input_output.back(), catalyst, time };
 	};
 
+	vector<reactant> getReactants() {
+		return _reactants;
+	}
+
+	vector<rule> getReactionRules() {
+		return _rules;
+	}
+
 	// Build Graph
 	string buildReactionGraph() {
 		string output = "digraph {";
-		auto s = "s";
-		auto r = "r";
 		auto i = 0;
 
-		auto [returnString, nodes] = (buildNodeString(s, "cyan", "box"));
+		auto [returnString, nodes] = (buildNodeString("s", "cyan", "box"));
 		output.append(returnString);
-		output.append(buildRuleString(nodes, r, "yellow", "oval"));
+		output.append(buildRuleString(nodes, "r", "yellow", "oval"));
 		output.append("}");
 
 		std::ofstream file("graph.dot");
@@ -62,6 +68,11 @@ public:
 
 		return output;
 	}
+
+private:
+	vector<reactant> _reactants;
+	vector<reactant> _env;
+	vector<rule> _rules;
 
 	// Helper for build graph
 	std::tuple<string, vector<node>> buildNodeString(string graphId, string fillcolor, string shape) {
@@ -124,87 +135,6 @@ public:
 
 		return nodeString.str();
 	};
-
-	void doStochaticSimulation(double T) {
-		vector<double> delays;
-
-		double t = 0;
-		while (t <= T)
-		{
-			rule leastDelayRule;
-			double leastDelay = 100000;
-
-			for (auto& rule : _rules) {
-				int totalQuantity = 1;
-				for (auto& input : rule.getInput()) {
-						totalQuantity *= getQuantity(input.getIdentifier(), _reactants);
-				};
-
-				for (auto& catalyst : rule.getCatalysts()) {
-					totalQuantity *= getQuantity(catalyst.getIdentifier(), _reactants);
-				};
-
-				double currentDelay = rule.getDelay(totalQuantity, rule.getTime());
-				if (currentDelay < leastDelay) {
-					leastDelay = currentDelay;
-					leastDelayRule = rule;
-				}
-			}
-			t += leastDelay;
-
-			bool isEnoughQuanity = true;
-
-			isEnoughQuanity = hasEnoughQuantities(leastDelayRule.getInput());
-			isEnoughQuanity &= hasEnoughQuantities(leastDelayRule.getCatalysts());
-
-			if (isEnoughQuanity) {
-				for (auto& ruleInput : leastDelayRule.getInput()) {
-					changeQuantity(ruleInput.getIdentifier(), _reactants, -ruleInput.getQuanitity());
-				}
-				for (auto& ruleOutput : leastDelayRule.getOutput()) {
-					changeQuantity(ruleOutput.getIdentifier(), _reactants, ruleOutput.getQuanitity());
-				}
-			}
-			std::cout << "Tiden: " << t << " " << "A:" << getQuantity("A", _reactants) << " MA: " << getQuantity("MA", _reactants) << std::endl;
-		}
-	}
-
-	bool hasEnoughQuantities(vector<reactant>& input) {
-		bool isEnoughQuanity = true;
-		for (auto& ruleInput : input) {
-			if (ruleInput.getQuanitity() > getQuantity(ruleInput.getIdentifier(), _reactants)) {
-				isEnoughQuanity = false;
-			}
-		}
-		return isEnoughQuanity;
-	}
-
-	void changeQuantity(string reactantId, vector<reactant>& state, int ruleQuantity) {
-		for (auto& reactorState : state) {
-			bool isSameReactant = reactorState.getIdentifier() == reactantId;
-
-			if (isSameReactant) {
-				reactorState.setQuantity(reactorState.getQuanitity() + ruleQuantity);
-			}
-		}
-	}
-
-	int getQuantity(string reactantId, vector<reactant>& state) {
-		for (auto& reactorState : state) {
-			bool isSameReactant = reactorState.getIdentifier() == reactantId;
-
-			if (isSameReactant) {
-				return reactorState.getQuanitity();
-			}
-		}
-
-		return 0;
-	}
-
-private:
-	vector<reactant> _reactants;
-	vector<reactant> _env;
-	vector<rule> _rules;
 };
 
 

@@ -145,12 +145,14 @@
     <ClCompile Include="src\reactant.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\vessel_t.cpp" />
+    <ClCompile Include="StochasticSimulator.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\node.h" />
     <ClInclude Include="src\rule.h" />
     <ClInclude Include="src\reactant.h" />
     <ClInclude Include="src\vessel_t.h" />
+    <ClInclude Include="StochasticSimulator.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
