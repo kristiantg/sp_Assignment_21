@@ -11,53 +11,55 @@
 #include <iostream>
 #include <set>
 
+using std::string;
+using std::vector;
 class vessel_t
 {
 public:
 	vessel_t() = default;
 
-	std::vector<reactant> environment() {
-		return env;
+	vector<reactant> environment() {
+		return _env;
 	};
 
 	// Initalize Reactant
-	std::vector<reactant> operator()(std::string reactant_identifier, int quantity) {
-		reactants.push_back(reactant(reactant_identifier, quantity));
-		return std::vector<reactant>{reactant(reactant_identifier, 1)};
+	vector<reactant> operator()(string reactant_identifier, int quantity) {
+		_reactants.push_back(reactant(reactant_identifier, quantity));
+		return vector<reactant>{reactant(reactant_identifier, 1)};
 	};
 
 	// Constructor with environment, reactants and time
-	std::vector<reactant> operator()(const std::vector<reactant> env, const std::vector<reactant> reactants, double time) {
+	vector<reactant> operator()(const vector<reactant> env, const vector<reactant> reactants, double time) {
 		return env;
 	};
 
 	// Constructor for rule
-	rule operator()(const std::vector<std::vector<reactant>> reaction_pair, double time) {
-		rules.push_back(rule{ reaction_pair.front(), reaction_pair.back(), time });
+	rule operator()(const vector<vector<reactant>> reaction_pair, double time) {
+		_rules.push_back(rule{ reaction_pair.front(), reaction_pair.back(), time });
 		return rule{ reaction_pair.front(), reaction_pair.back(), time };
 	};
 
 	// Secondary constructor for rule
-	rule operator()(const std::vector<std::vector<reactant>> reactio_input_output, const std::vector<reactant> catalyst, double time) {
-		rules.push_back(rule{ reactio_input_output.front(), reactio_input_output.back(), catalyst, time });
+	rule operator()(const vector<vector<reactant>> reactio_input_output, const vector<reactant> catalyst, double time) {
+		_rules.push_back(rule{ reactio_input_output.front(), reactio_input_output.back(), catalyst, time });
 		return rule{ reactio_input_output.front(), reactio_input_output.back(), catalyst, time };
 	};
 
-	std::string printReactions() {
+	string printReactions() {
 
 	}
 
 	// Build Graph
-	std::string buildReactionGraph() {
-		std::vector<node> nodes;
-		std::string output = "digraph {";
+	string buildReactionGraph() {
+		vector<node> nodes;
+		string output = "digraph {";
 		auto s = "s";
 		auto r = "r";
 		auto i = 0;
 
-		for (const auto& reactant : reactants)
+		for (const auto& reactant : _reactants)
 		{
-			std::string nodeId = "s";
+			string nodeId = "s";
 			nodeId.append(std::to_string(i));
 			nodes.push_back(node{ reactant.getQuanitity(), nodeId, reactant.getIdentifier() });
 			output.append(buildNodeString(s, i, reactant.getIdentifier(), "cyan", "box"));
@@ -74,9 +76,9 @@ public:
 	}
 
 	// Helper for build graph
-	std::string buildNodeString(std::string graphId, int labelNumber, std::string label, std::string fillcolor, std::string shape) {
+	string buildNodeString(string graphId, int labelNumber, string label, string fillcolor, string shape) {
 
-		std::string nodeId = graphId;
+		string nodeId = graphId;
 		nodeId.append(std::to_string(labelNumber));
 		std::stringstream nodeString;
 
@@ -90,7 +92,7 @@ public:
 		std::stringstream nodeString;
 		int i = 0;
 
-		for (auto& rule : rules)
+		for (auto& rule : _rules)
 		{
 			auto nodeIdentifier = graphId;
 			nodeIdentifier.append(std::to_string(i));
@@ -129,7 +131,7 @@ public:
 	};
 
 	void doStochaticSimulation(double T) {
-		std::vector<double> delays;
+		vector<double> delays;
 
 		double t = 0;
 		while (t <= T)
@@ -137,14 +139,14 @@ public:
 			rule leastDelayRule;
 			double leastDelay = 100000;
 
-			for (auto& rule : rules) {
+			for (auto& rule : _rules) {
 				int totalQuantity = 1;
 				for (auto& input : rule.getInput()) {
-						totalQuantity *= getQuantity(input.getIdentifier(), reactants);
+						totalQuantity *= getQuantity(input.getIdentifier(), _reactants);
 				};
 
 				for (auto& catalyst : rule.getCatalysts()) {
-					totalQuantity *= getQuantity(catalyst.getIdentifier(), reactants);
+					totalQuantity *= getQuantity(catalyst.getIdentifier(), _reactants);
 				};
 
 				double currentDelay = rule.getDelay(totalQuantity, rule.getTime());
@@ -162,27 +164,27 @@ public:
 
 			if (isEnoughQuanity) {
 				for (auto& ruleInput : leastDelayRule.getInput()) {
-					changeQuantity(ruleInput.getIdentifier(), reactants, -ruleInput.getQuanitity());
+					changeQuantity(ruleInput.getIdentifier(), _reactants, -ruleInput.getQuanitity());
 				}
 				for (auto& ruleOutput : leastDelayRule.getOutput()) {
-					changeQuantity(ruleOutput.getIdentifier(), reactants, ruleOutput.getQuanitity());
+					changeQuantity(ruleOutput.getIdentifier(), _reactants, ruleOutput.getQuanitity());
 				}
 			}
-			std::cout << "Tiden: " << t << " " << "A:" << getQuantity("A", reactants) << " MA: " << getQuantity("MA", reactants) << std::endl;
+			std::cout << "Tiden: " << t << " " << "A:" << getQuantity("A", _reactants) << " MA: " << getQuantity("MA", _reactants) << std::endl;
 		}
 	}
 
-	bool hasEnoughQuantities(std::vector<reactant>& input) {
+	bool hasEnoughQuantities(vector<reactant>& input) {
 		bool isEnoughQuanity = true;
 		for (auto& ruleInput : input) {
-			if (ruleInput.getQuanitity() > getQuantity(ruleInput.getIdentifier(), reactants)) {
+			if (ruleInput.getQuanitity() > getQuantity(ruleInput.getIdentifier(), _reactants)) {
 				isEnoughQuanity = false;
 			}
 		}
 		return isEnoughQuanity;
 	}
 
-	void changeQuantity(std::string reactantId, std::vector<reactant>& state, int ruleQuantity) {
+	void changeQuantity(string reactantId, vector<reactant>& state, int ruleQuantity) {
 		for (auto& reactorState : state) {
 			bool isSameReactant = reactorState.getIdentifier() == reactantId;
 
@@ -192,7 +194,7 @@ public:
 		}
 	}
 
-	int getQuantity(std::string reactantId, std::vector<reactant>& state) {
+	int getQuantity(string reactantId, vector<reactant>& state) {
 		for (auto& reactorState : state) {
 			bool isSameReactant = reactorState.getIdentifier() == reactantId;
 
@@ -205,9 +207,9 @@ public:
 	}
 
 private:
-	std::vector<reactant> reactants;
-	std::vector<reactant> env;
-	std::vector<rule> rules;
+	vector<reactant> _reactants;
+	vector<reactant> _env;
+	vector<rule> _rules;
 };
 
 
