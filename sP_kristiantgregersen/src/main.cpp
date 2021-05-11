@@ -125,7 +125,8 @@ vessel_t circadian_oscillator2() {
 
 int main() 
 { 
-    vessel_t t;
-    t = circadian_oscillator2();
+    vessel_t t; // Default constructor, allocated on the stack
+    t = circadian_oscillator();
+    t.doStochaticSimulation(100000);
     std::cout << t.buildReactionGraph() << std::endl;
 }
