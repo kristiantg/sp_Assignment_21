@@ -45,27 +45,15 @@ public:
 		return rule{ reactio_input_output.front(), reactio_input_output.back(), catalyst, time };
 	};
 
-	string printReactions() {
-
-	}
-
 	// Build Graph
 	string buildReactionGraph() {
-		vector<node> nodes;
 		string output = "digraph {";
 		auto s = "s";
 		auto r = "r";
 		auto i = 0;
 
-		for (const auto& reactant : _reactants)
-		{
-			string nodeId = "s";
-			nodeId.append(std::to_string(i));
-			nodes.push_back(node{ reactant.getQuanitity(), nodeId, reactant.getIdentifier() });
-			output.append(buildNodeString(s, i, reactant.getIdentifier(), "cyan", "box"));
-			i++;
-		}
-
+		auto [returnString, nodes] = (buildNodeString(s, "cyan", "box"));
+		output.append(returnString);
 		output.append(buildRuleString(nodes, r, "yellow", "oval"));
 		output.append("}");
 
@@ -76,14 +64,21 @@ public:
 	}
 
 	// Helper for build graph
-	string buildNodeString(string graphId, int labelNumber, string label, string fillcolor, string shape) {
-
-		string nodeId = graphId;
-		nodeId.append(std::to_string(labelNumber));
+	std::tuple<string, vector<node>> buildNodeString(string graphId, string fillcolor, string shape) {
+		int i = 0;
 		std::stringstream nodeString;
+		vector<node> nodes;
 
-		nodeString << nodeId << "[label=\"" << label << "\",shape=\"" << shape << "\",style=\"filled\",fillcolor=\"" << fillcolor << "\"];" << std::endl;
-		return nodeString.str();
+		for (const auto& reactant : _reactants)
+		{
+			string nodeId = "s";
+			nodeId.append(std::to_string(i));
+			nodes.push_back(node{ reactant.getQuanitity(), nodeId, reactant.getIdentifier() });
+			nodeString << nodeId << "[label=\"" << reactant.getIdentifier() << "\",shape=\"" << shape << "\",style=\"filled\",fillcolor=\"" << fillcolor << "\"];" << std::endl;
+			i++;
+		}
+
+		return  { nodeString.str(), nodes };
 	};
 
 	// Helper for build graph
