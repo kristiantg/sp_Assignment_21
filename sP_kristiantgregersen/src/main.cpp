@@ -124,7 +124,7 @@ vessel_t circadian_oscillator2() {
     v(MR >>= env, deltaMR);
     return v;
 }
-// RAII
+// Timer for testing implemented - Resource acquisition is initialization (RAII)
 class Timer {
 public:
     Timer() {
@@ -154,22 +154,30 @@ private:
 
 int main() 
 { 
-    //reactant testReactor = reactant{ "hey", 1 };
-    //reactant testReactor1 = reactant{ "te", 2 };
-    //SymbolTable<reactant> table = SymbolTable{ table };
-    //table.insertIntoTable(testReactor);
-    //table.insertIntoTable(testReactor1);
-    //auto test2 = table.lookupTable("te");
-    //auto test3 = table.lookupTable("ik");
+    // Symbol-table test. 
+    // Requires for user to give a vector of wished type as constructor parameter. 
+    // Library requires for type to have .getIdentifier() method.
 
+    std::vector<reactant> tableInformation;
+    reactant reactant1 = reactant{ "B", 1 };
+    reactant reactant2 = reactant{ "A", 2 };
+    SymbolTable<reactant> symbolTableTest = SymbolTable{ tableInformation };
+    symbolTableTest.insertIntoTable(reactant1);
+    symbolTableTest.insertIntoTable(reactant2);
+    auto test2 = symbolTableTest.lookupTable("B");
+    symbolTableTest.deleteFromTable("A");
+
+    // Select which system to test on.
     auto tester = seihr(pow(10, 4));
     //auto tester = circadian_oscillator();
-    std::cout << tester.buildReactionGraph() << std::endl;
+    //auto tester = circadian_oscillator2();
 
     int oscilator = 0;
     int oscilator2 = 1;
     int seihr = 2;
 
+    // Test for building graph.
+    std::cout << tester.buildReactionGraph() << std::endl;
     {
         StochasticSimulator simulator;
         Timer timer;

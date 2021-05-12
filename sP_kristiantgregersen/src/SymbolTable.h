@@ -26,18 +26,20 @@ public:
 		}
 	}
 
-	void deleteFromTable(T lookup) {
+	void deleteFromTable(std::string lookup) {
 		bool found = false;
 		try {
-			for (auto& element : table) {
-				if (element.getIdentifier() == lookup) {
-					table.erase(element);
+			for (auto i = 0; i < table.size(); i++)
+			{
+				if (table.at(i).getIdentifier() == lookup) {
+					table.erase(table.begin() + i);
 					found = true;
 					break;
 				}
-				if (!found) {
-					throw ElementNotFoundException();
-				}
+			}
+
+			if (!found) {
+				throw ElementNotFoundException();
 			}
 		}
 		catch (ElementNotFoundException& e) {
