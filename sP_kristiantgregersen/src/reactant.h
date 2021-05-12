@@ -23,7 +23,7 @@ public:
 		return reactant;
 	};
 
-	friend vector<vector<reactant>> operator>>=(vector<reactant> input, vector<reactant> const output) {
+	friend vector<vector<reactant>> operator>>=(vector<reactant> input, vector<reactant> output) {
 		vector<vector<reactant>> reactant;
 		reactant.push_back(input);
 		reactant.push_back(output);

@@ -21,7 +21,7 @@ double& rule::getTime()
 	return time;
 };
 
-double rule::getDelay(int quantity, double time)
+double rule::getDelay(int& quantity, double& time)
 {
 	std::default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
 	double delay = quantity * time;

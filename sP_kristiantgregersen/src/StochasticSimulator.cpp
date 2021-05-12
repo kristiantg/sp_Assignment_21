@@ -1,11 +1,11 @@
 #include "StochasticSimulator.h"
 
-void StochasticSimulator::doMultithreadedStochaticSimulation(double T, vector<reactant> state, vector<rule> _rules, int example)
+void StochasticSimulator::doMultithreadedStochaticSimulation(double& T, vector<reactant> state, vector<rule>& _rules, int& example, std::string& path, int& numberOfThreads)
 {
 	vector<std::thread> threads;
-	for (auto i = 0; i < 8; i++)
+	for (auto i = 0; i < numberOfThreads; i++)
 	{
-		threads.push_back(std::thread([&]() {doStochaticSimulation(T, state, _rules, example);}));
+		threads.push_back(std::thread([&]() {doStochaticSimulation(T, state, _rules, example, path);}));
 	}
 
 	for (auto& thread : threads) {
@@ -13,7 +13,7 @@ void StochasticSimulator::doMultithreadedStochaticSimulation(double T, vector<re
 	}
 }
 
-void StochasticSimulator::doStochaticSimulation(double T, vector<reactant> state, vector<rule> _rules, int example)
+void StochasticSimulator::doStochaticSimulation(double& T, vector<reactant> state, vector<rule>& _rules, int& example, std::string& path)
 {
 	std::ofstream file;
 	file.open("C:/Users/kristiantg/Documents/GitHub/sP_assignment/test.csv");

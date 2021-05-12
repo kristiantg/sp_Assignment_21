@@ -23,11 +23,11 @@ rule vessel_t::operator()(const vector<vector<reactant>> reactio_input_output, c
 	_rules.push_back(rule{ reactio_input_output.front(), reactio_input_output.back(), catalyst, time });
 	return rule{ reactio_input_output.front(), reactio_input_output.back(), catalyst, time };
 }
-vector<reactant> vessel_t::getReactants()
+vector<reactant> vessel_t::getReactants() const
 {
 	return _reactants;
 }
-vector<rule> vessel_t::getReactionRules()
+vector<rule>& vessel_t::getReactionRules()
 {
 	return _rules;
 }

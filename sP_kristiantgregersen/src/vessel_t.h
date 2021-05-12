@@ -32,8 +32,8 @@ public:
 	// Secondary constructor for rule
 	rule operator()(const vector<vector<reactant>> reactio_input_output, const vector<reactant> catalyst, double time);
 
-	vector<reactant> getReactants();
-	vector<rule> getReactionRules();
+	vector<reactant> getReactants() const;
+	vector<rule>& getReactionRules();
 	string buildReactionGraph();
 
 private:

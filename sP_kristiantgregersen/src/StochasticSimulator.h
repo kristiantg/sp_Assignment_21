@@ -14,8 +14,8 @@ class StochasticSimulator
 public:
 	StochasticSimulator() = default;
 
-	void doMultithreadedStochaticSimulation(double T, vector<reactant> state, vector<rule> _rules, int example);
-	void doStochaticSimulation(double T, vector<reactant> state, vector<rule> _rules, int example);
+	void doMultithreadedStochaticSimulation(double& T, vector<reactant> state, vector<rule>& _rules, int& example, string& path, int& numberOfThreads);
+	void doStochaticSimulation(double& T, vector<reactant> state, vector<rule>& _rules, int& example, string& path);
 private:
 	bool hasEnoughQuantities(vector<reactant>& input, vector<reactant>& state);
 	void changeQuantity(string reactantId, vector<reactant>& state, int ruleQuantity);

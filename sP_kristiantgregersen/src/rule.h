@@ -20,6 +20,6 @@ public:
 	std::vector<reactant>& getCatalysts();
 	std::vector<reactant>& getInput();
 	double& getTime();
-	double getDelay(int quantity, double time);
+	double getDelay(int& quantity, double& time);
 };
 

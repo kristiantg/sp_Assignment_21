@@ -154,13 +154,14 @@ private:
 
 int main() 
 { 
-    reactant testReactor = reactant{ "hey", 1 };
-    reactant testReactor1 = reactant{ "te", 2 };
-    SymbolTable<reactant> table = SymbolTable{ table };
-    table.insertIntoTable(testReactor);
-    table.insertIntoTable(testReactor1);
-    auto test2 = table.lookupTable("te");
-    auto test3 = table.lookupTable("ik");
+    //reactant testReactor = reactant{ "hey", 1 };
+    //reactant testReactor1 = reactant{ "te", 2 };
+    //SymbolTable<reactant> table = SymbolTable{ table };
+    //table.insertIntoTable(testReactor);
+    //table.insertIntoTable(testReactor1);
+    //auto test2 = table.lookupTable("te");
+    //auto test3 = table.lookupTable("ik");
+
     auto tester = seihr(pow(10, 4));
     //auto tester = circadian_oscillator();
     std::cout << tester.buildReactionGraph() << std::endl;
@@ -169,15 +170,24 @@ int main()
     int oscilator2 = 1;
     int seihr = 2;
 
-    //{
-    //    StochasticSimulator simulator;
-    //    Timer timer;
-    //    simulator.doMultithreadedStochaticSimulation(100, tester.getReactants(), tester.getReactionRules(), 2);
-    //}
-    //std::cout << std::endl;
     {
         StochasticSimulator simulator;
         Timer timer;
-        simulator.doStochaticSimulation(100, tester.getReactants(), tester.getReactionRules(), 2);
+        double time = 100;
+        int flag = 2;
+        int threads = 2;
+        std::string filePath = "C:/Users/kristiantg/Documents/GitHub/sP_assignment/test.csv";
+        simulator.doMultithreadedStochaticSimulation(time, tester.getReactants(), tester.getReactionRules(), flag, filePath, threads);
     }
+    std::cout << std::endl;
+    {
+        double time = 100;
+        int flag = 2;
+        std::string filePath = "C:/Users/kristiantg/Documents/GitHub/sP_assignment/test.csv";
+        StochasticSimulator simulator;
+        Timer timer;
+        simulator.doStochaticSimulation(time, tester.getReactants(), tester.getReactionRules(), flag, filePath);
+        std::cout << "program finished" << std::endl;
+    }
+    return 0;
 }
