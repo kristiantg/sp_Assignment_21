@@ -147,6 +147,7 @@
     <ClCompile Include="src\vessel_t.cpp" />
     <ClCompile Include="src\StochasticSimulator.cpp" />
     <ClCompile Include="src\SymbolTable.cpp" />
+    <ClCompile Include="src\SystemStateMonitor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\node.h" />
@@ -155,6 +156,7 @@
     <ClInclude Include="src\vessel_t.h" />
     <ClInclude Include="src\StochasticSimulator.h" />
     <ClInclude Include="src\SymbolTable.h" />
+    <ClInclude Include="src\SystemStateMonitor.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

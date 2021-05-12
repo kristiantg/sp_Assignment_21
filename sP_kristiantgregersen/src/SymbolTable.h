@@ -16,6 +16,7 @@ class SymbolTable
 	std::vector<T> table;
 public:
 	SymbolTable(std::vector<T> _table) : table(_table) {}
+	SymbolTable() = delete;
 
 	void insertIntoTable(T insert) {
 		try {

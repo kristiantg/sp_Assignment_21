@@ -1,4 +1,5 @@
 #include "StochasticSimulator.h"
+#include "SystemStateMonitor.h"
 
 void StochasticSimulator::doMultithreadedStochaticSimulation(double& T, vector<reactant> state, vector<rule>& _rules, int& example, std::string& path, int& numberOfThreads)
 {
@@ -15,8 +16,9 @@ void StochasticSimulator::doMultithreadedStochaticSimulation(double& T, vector<r
 
 void StochasticSimulator::doStochaticSimulation(double& T, vector<reactant> state, vector<rule>& _rules, int& example, std::string& path)
 {
+	SystemStateMonitor<string> systemStateMonitor = SystemStateMonitor<string>{ "A" };
 	std::ofstream file;
-	file.open("C:/Users/kristiantg/Documents/GitHub/sP_assignment/test.csv");
+	file.open(path);
 
 	if (file.is_open()) {
 		if (example == 2) {
@@ -66,7 +68,12 @@ void StochasticSimulator::doStochaticSimulation(double& T, vector<reactant> stat
 				changeQuantity(ruleOutput.getIdentifier(), state, ruleOutput.getQuanitity());
 			}
 		}
-		//SEIHR
+
+		//monitorStateHelper
+		auto test = getQuantity("H", state);
+		systemStateMonitor.setCount(test);
+		std::cout << systemStateMonitor.getMean() << std::endl;
+		
 		if (file.is_open()) {
 			if (example == 2) {
 				file << getQuantity("S", state) << "," << getQuantity("E", state) << "," << getQuantity("I", state) << "," << getQuantity("H", state) << "," << getQuantity("R", state) << "," << t << "\n";

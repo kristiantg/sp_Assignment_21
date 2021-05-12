@@ -4,6 +4,7 @@
 #include <string>
 #include "StochasticSimulator.h"
 #include "SymbolTable.h"
+#include "SystemStateMonitor.h"
 
 vessel_t seihr(uint32_t N)
 {
@@ -157,7 +158,6 @@ int main()
     // Symbol-table test. 
     // Requires for user to give a vector of wished type as constructor parameter. 
     // Library requires for type to have .getIdentifier() method.
-
     std::vector<reactant> tableInformation;
     reactant reactant1 = reactant{ "B", 1 };
     reactant reactant2 = reactant{ "A", 2 };
