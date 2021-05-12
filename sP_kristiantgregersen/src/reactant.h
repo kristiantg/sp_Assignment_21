@@ -23,8 +23,6 @@ public:
 		return reactant;
 	};
 
-	// LHS : Input 
-	// RHS : Output of '>>='
 	friend vector<vector<reactant>> operator>>=(vector<reactant> input, vector<reactant> const output) {
 		vector<vector<reactant>> reactant;
 		reactant.push_back(input);
@@ -32,16 +30,9 @@ public:
 		return reactant;
 	}
 
-	std::string getIdentifier() const {
-		return _identifier;
-	}
+	std::string getIdentifier() const;
+	int getQuanitity() const;
 
-	int getQuanitity() const {
-		return _quantity;
-	}
-
-	void setQuantity(int quantity)  {
-		_quantity = quantity;
-	}
+	void setQuantity(int quantity);
 };
 
