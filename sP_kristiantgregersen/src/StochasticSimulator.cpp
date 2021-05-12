@@ -1,6 +1,7 @@
 #include "StochasticSimulator.h"
 #include "SystemStateMonitor.h"
 
+// Spwans k threads to do stochastic simulation.
 void StochasticSimulator::doMultithreadedStochaticSimulation(double& T, vector<Reactant> state, vector<ReactionRule>& _rules, int& numberOfThreads)
 {
 	vector<std::thread> threads;
@@ -14,6 +15,7 @@ void StochasticSimulator::doMultithreadedStochaticSimulation(double& T, vector<R
 	}
 }
 
+// Stochastic simulator
 void StochasticSimulator::doStochaticSimulation(double& T, vector<Reactant> state, vector<ReactionRule>& _rules)
 {
 	SystemStateMonitor<string> systemStateMonitor = SystemStateMonitor<string>{ getReactantToMonitor() };
@@ -29,8 +31,10 @@ void StochasticSimulator::doStochaticSimulation(double& T, vector<Reactant> stat
 	while (t <= T)
 	{
 		ReactionRule leastDelayRule;
+		// Sets delay to a high number.
 		double leastDelay = 100000;
 
+		// Calculates the rule with the least delay.
 		for (auto& rule : _rules) {
 			int totalQuantity = 1;
 			for (auto& input : rule.getInput()) {
@@ -49,8 +53,8 @@ void StochasticSimulator::doStochaticSimulation(double& T, vector<Reactant> stat
 		}
 		t += leastDelay;
 
+		// Computes if we have enough reactants to complete a reaction.
 		bool isEnoughQuanity = true;
-
 		isEnoughQuanity = hasEnoughQuantities(leastDelayRule.getInput(), state);
 		isEnoughQuanity &= hasEnoughQuantities(leastDelayRule.getCatalysts(), state);
 
@@ -63,12 +67,14 @@ void StochasticSimulator::doStochaticSimulation(double& T, vector<Reactant> stat
 			}
 		}
 
+		// Monitor the system.
 		if (getToMonitor()) {
 			systemStateMonitor.setCount(getQuantity(getReactantToMonitor(), state));
 			std::cout << systemStateMonitor.getMean() << std::endl;
 			std::cout << systemStateMonitor.getMean() << std::endl;
 		}
 
+		// Print tracectory to a csv-file.
 		printTrajectory(state, t, file);
 	}
 	file.close();
@@ -85,6 +91,7 @@ void StochasticSimulator::printTrajectory(vector<Reactant>& state, double& t, st
 	}
 }
 
+// Helper for finding if enough quantities.
 bool StochasticSimulator::hasEnoughQuantities(vector<Reactant>& input, vector<Reactant>& state)
 {
 	bool isEnoughQuanity = true;
@@ -96,6 +103,7 @@ bool StochasticSimulator::hasEnoughQuantities(vector<Reactant>& input, vector<Re
 	return isEnoughQuanity;
 }
 
+// Helper for setting quantities after update.
 void StochasticSimulator::changeQuantity(string reactantId, vector<Reactant>& state, int ruleQuantity)
 {
 	for (auto& reactorState : state) {
@@ -107,6 +115,7 @@ void StochasticSimulator::changeQuantity(string reactantId, vector<Reactant>& st
 	}
 }
 
+// Helper for getting quantities.
 int StochasticSimulator::getQuantity(string reactantId, vector<Reactant>& state)
 {
 	for (auto& reactorState : state) {

@@ -4,6 +4,8 @@ vector<Reactant> vessel_t::environment()
 {
 	return _env;
 }
+
+// Operator overload for parsing a reactant.
 vector<Reactant> vessel_t::operator()(string reactant_identifier, int quantity)
 {
 	_reactants.push_back(Reactant(reactant_identifier, quantity));
@@ -14,23 +16,31 @@ vector<Reactant> vessel_t::operator()(const vector<Reactant> env, const vector<R
 	return env;
 };
 
+// Operator overload for parsing a rule with a pair.
 ReactionRule vessel_t::operator()(const vector<vector<Reactant>> reaction_pair, double time) {
 	_rules.push_back(ReactionRule{ reaction_pair.front(), reaction_pair.back(), time });
 	return ReactionRule{ reaction_pair.front(), reaction_pair.back(), time };
 };
 
+// Operator overload for parsing reaction rule with an input, output and catalyst.
 ReactionRule vessel_t::operator()(const vector<vector<Reactant>> reactio_input_output, const vector<Reactant> catalyst, double time) {
 	_rules.push_back(ReactionRule{ reactio_input_output.front(), reactio_input_output.back(), catalyst, time });
 	return ReactionRule{ reactio_input_output.front(), reactio_input_output.back(), catalyst, time };
 }
+
+// Getter for reactants.
 vector<Reactant> vessel_t::getReactants() const
 {
 	return _reactants;
 }
+
+// Getter for reaction rules.
 vector<ReactionRule>& vessel_t::getReactionRules()
 {
 	return _rules;
 }
+
+// Builds the graph for showing reactants and rules.
 string vessel_t::buildReactionGraph()
 {
 	string output = "digraph {";
@@ -47,6 +57,7 @@ string vessel_t::buildReactionGraph()
 	return output;
 }
 
+// Pretty-print function.
 void vessel_t::prettyPrint()
 {
 	for (auto& rule : _rules) {
@@ -68,12 +79,13 @@ void vessel_t::prettyPrint()
 			std::cout << rule.getOutput().front().getIdentifier();
 		}
 		else {
-			std::cout << "env ";
+			std::cout << "env";
 		}
-		std::cout << "with time-delay: " << rule.getTime() << std::endl;
+		std::cout << " with time-delay: " << rule.getTime() << std::endl;
 	}
 }
 
+// Helper function for building reactant nodes.
 std::tuple<string, vector<node>> vessel_t::buildNodeString(string graphId, string fillcolor, string shape) {
 	int i = 0;
 	std::stringstream nodeString;
@@ -91,6 +103,7 @@ std::tuple<string, vector<node>> vessel_t::buildNodeString(string graphId, strin
 	return  { nodeString.str(), nodes };
 };
 
+// Helper function for building rule-graphs.
 std::string vessel_t::buildRuleString(std::vector<node> nodes, std::string graphId, std::string fillcolor, std::string shape) {
 
 	std::stringstream nodeString;

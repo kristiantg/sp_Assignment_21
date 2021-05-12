@@ -7,7 +7,7 @@
 #include "SystemStateMonitor.h"
 
 
-// Timer for testing implemented - Resource acquisition is initialization (RAII)
+// Timer for testing implemented - Resource acquisition is initialization (RAII) (Courtesy of the Youtuber, The Cherno)
 class Timer {
 public:
     Timer() {
@@ -157,7 +157,7 @@ vessel_t circadian_oscillator2() {
 
 int main() 
 { 
-    int chooser = 0; // Select which system to test on from under:    
+    int chooser = 2; // Select which system to test on from under:    
     int oscilator = 0;
     int oscilator2 = 1;
     int seihr1 = 2;

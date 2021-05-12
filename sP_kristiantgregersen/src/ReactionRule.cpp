@@ -21,6 +21,7 @@ double& ReactionRule::getTime()
 	return time;
 };
 
+// Computes the delay for the stochastic simulator. Receives time (decay) and the amount of reactants.
 double ReactionRule::getDelay(int& quantity, double& time)
 {
 	std::default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());

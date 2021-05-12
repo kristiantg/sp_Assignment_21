@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 
+// Simple node class. Used to keep track of nodes, in graph-visualization of assignment 3.
 class node
 {
 public:
