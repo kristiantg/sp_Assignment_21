@@ -76,7 +76,7 @@ void StochasticSimulator::doStochaticSimulation(double& T, vector<Reactant> stat
 
 void StochasticSimulator::printTrajectory(vector<Reactant>& state, double& t, std::ofstream& file) {
 	if (file.is_open()) {
-		if (exampleFlag == 2) {
+		if (getExampleFlag() == 2) {
 			file << getQuantity("S", state) << "," << getQuantity("E", state) << "," << getQuantity("I", state) << "," << getQuantity("H", state) << "," << getQuantity("R", state) << "," << t << "\n";
 		}
 		else {

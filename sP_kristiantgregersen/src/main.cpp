@@ -157,6 +157,30 @@ vessel_t circadian_oscillator2() {
 
 int main() 
 { 
+    int chooser = 1; // Select which system to test on from under:    
+    int oscilator = 0;
+    int oscilator2 = 1;
+    int seihr1 = 2;
+    int numberOfThreads = 2;
+    double time = 100;
+    std::string header;
+    std::string path = "C:/Users/kristiantg/Documents/GitHub/sP_assignment/test.csv";
+
+    vessel_t tester;
+
+    if (chooser == oscilator) {
+        tester = circadian_oscillator();
+        header = "A,C,R,time\n";
+    }
+    if (chooser == oscilator2) {
+        tester = circadian_oscillator2();
+        header = "A,C,R,time\n";
+    }
+    if (chooser == seihr1) {
+        tester = seihr(pow(10, 4));
+        header = "S,E,I,H,R,time\n";
+    }
+
     // Symbol-table test. 
     // Requires for user to give a vector of wished type as constructor parameter. 
     // Library requires for type to have .getIdentifier() method.
@@ -169,32 +193,26 @@ int main()
     auto test2 = symbolTableTest.lookupTable("B");
     symbolTableTest.deleteFromTable("A");
 
-    // Select which system to test on.
-    auto tester = seihr(pow(10, 4));
-    //auto tester = circadian_oscillator();
-    //auto tester = circadian_oscillator2();
-
-    int oscilator = 0;
-    int oscilator2 = 1;
-    int seihr = 2;
-
     // Test for building graph.
     std::cout << tester.buildReactionGraph() << std::endl;
+
+    // Run simulation with time output:
     {
         Timer timer;
         std::string monitorId = "H";
-        StochasticSimulator simulator{ monitorId, "C:/Users/kristiantg/Documents/GitHub/sP_assignment/test.csv", "S,E,I,H,R,time\n", seihr, false };
-        double time = 100;
-        int numberOfThreads = 2;
+        StochasticSimulator simulator{ monitorId, path, header, chooser, false };
         simulator.doMultithreadedStochaticSimulation(time, tester.getReactants(), tester.getReactionRules(), numberOfThreads);
     }
     std::cout << std::endl;
     {
         Timer timer;
         std::string monitorId = "H";
-        StochasticSimulator simulator{ monitorId, "C:/Users/kristiantg/Documents/GitHub/sP_assignment/test.csv", "S,E,I,H,R,time\n", seihr, false };
-        double time = 100;
-        simulator.doStochaticSimulation(time, tester.getReactants(), tester.getReactionRules());
+        StochasticSimulator simulator{ monitorId, path, header, chooser, false };
+
+        for (auto i = 0; i < numberOfThreads; i++)
+        {
+            simulator.doStochaticSimulation(time, tester.getReactants(), tester.getReactionRules());
+        }
     }
     return 0;
 }
