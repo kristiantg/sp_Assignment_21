@@ -157,7 +157,7 @@ vessel_t circadian_oscillator2() {
 
 int main() 
 { 
-    int chooser = 1; // Select which system to test on from under:    
+    int chooser = 0; // Select which system to test on from under:    
     int oscilator = 0;
     int oscilator2 = 1;
     int seihr1 = 2;
@@ -195,6 +195,7 @@ int main()
 
     // Test for building graph.
     std::cout << tester.buildReactionGraph() << std::endl;
+    tester.prettyPrint();
 
     // Run simulation with time output:
     {

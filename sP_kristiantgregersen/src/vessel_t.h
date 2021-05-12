@@ -35,6 +35,7 @@ public:
 	vector<Reactant> getReactants() const;
 	vector<ReactionRule>& getReactionRules();
 	string buildReactionGraph();
+	void prettyPrint();
 
 private:
 	vector<Reactant> _reactants;

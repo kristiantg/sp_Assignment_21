@@ -47,6 +47,33 @@ string vessel_t::buildReactionGraph()
 	return output;
 }
 
+void vessel_t::prettyPrint()
+{
+	for (auto& rule : _rules) {
+		if (rule.getInput().size() == 0) {
+			std::cout << "env ";
+		}else {
+			if (rule.getInput().size() > 1) {
+				std::cout << rule.getInput().front().getIdentifier() << " + " << rule.getInput().back().getIdentifier();
+			}
+			else {
+				std::cout << rule.getInput().front().getIdentifier();
+			}
+		}
+		std::cout << " -> ";
+		if (rule.getOutput().size() > 1) {
+			std::cout << rule.getOutput().front().getIdentifier() << " + " << rule.getOutput().back().getIdentifier();
+		}
+		else if (rule.getOutput().size() == 1) {
+			std::cout << rule.getOutput().front().getIdentifier();
+		}
+		else {
+			std::cout << "env ";
+		}
+		std::cout << "with time-delay: " << rule.getTime() << std::endl;
+	}
+}
+
 std::tuple<string, vector<node>> vessel_t::buildNodeString(string graphId, string fillcolor, string shape) {
 	int i = 0;
 	std::stringstream nodeString;
