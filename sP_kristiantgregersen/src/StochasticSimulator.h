@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
-#include "rule.h"
+#include "ReactionRule.h"
 #include <iostream>
 #include <fstream>
 #include <thread>
@@ -14,11 +14,11 @@ class StochasticSimulator
 public:
 	StochasticSimulator() = default;
 
-	void doMultithreadedStochaticSimulation(double& T, vector<reactant> state, vector<rule>& _rules, int& example, string& path, int& numberOfThreads);
-	void doStochaticSimulation(double& T, vector<reactant> state, vector<rule>& _rules, int& example, string& path);
+	void doMultithreadedStochaticSimulation(double& T, vector<Reactant> state, vector<ReactionRule>& _rules, int& example, string& path, int& numberOfThreads);
+	void doStochaticSimulation(double& T, vector<Reactant> state, vector<ReactionRule>& _rules, int& example, string& path);
 private:
-	bool hasEnoughQuantities(vector<reactant>& input, vector<reactant>& state);
-	void changeQuantity(string reactantId, vector<reactant>& state, int ruleQuantity);
-	int getQuantity(string reactantId, vector<reactant>& state);
+	bool hasEnoughQuantities(vector<Reactant>& input, vector<Reactant>& state);
+	void changeQuantity(string reactantId, vector<Reactant>& state, int ruleQuantity);
+	int getQuantity(string reactantId, vector<Reactant>& state);
 };
 

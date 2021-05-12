@@ -158,10 +158,10 @@ int main()
     // Symbol-table test. 
     // Requires for user to give a vector of wished type as constructor parameter. 
     // Library requires for type to have .getIdentifier() method.
-    std::vector<reactant> tableInformation;
-    reactant reactant1 = reactant{ "B", 1 };
-    reactant reactant2 = reactant{ "A", 2 };
-    SymbolTable<reactant> symbolTableTest = SymbolTable{ tableInformation };
+    std::vector<Reactant> tableInformation;
+    Reactant reactant1 = Reactant{ "B", 1 };
+    Reactant reactant2 = Reactant{ "A", 2 };
+    SymbolTable<Reactant> symbolTableTest = SymbolTable{ tableInformation };
     symbolTableTest.insertIntoTable(reactant1);
     symbolTableTest.insertIntoTable(reactant2);
     auto test2 = symbolTableTest.lookupTable("B");

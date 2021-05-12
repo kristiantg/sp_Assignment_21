@@ -1,33 +1,33 @@
 #include "vessel_t.h"
 
-vector<reactant> vessel_t::environment()
+vector<Reactant> vessel_t::environment()
 {
 	return _env;
 }
-vector<reactant> vessel_t::operator()(string reactant_identifier, int quantity)
+vector<Reactant> vessel_t::operator()(string reactant_identifier, int quantity)
 {
-	_reactants.push_back(reactant(reactant_identifier, quantity));
-	return vector<reactant>{reactant(reactant_identifier, 1)};
+	_reactants.push_back(Reactant(reactant_identifier, quantity));
+	return vector<Reactant>{Reactant(reactant_identifier, 1)};
 };
 
-vector<reactant> vessel_t::operator()(const vector<reactant> env, const vector<reactant> reactants, double time) {
+vector<Reactant> vessel_t::operator()(const vector<Reactant> env, const vector<Reactant> reactants, double time) {
 	return env;
 };
 
-rule vessel_t::operator()(const vector<vector<reactant>> reaction_pair, double time) {
-	_rules.push_back(rule{ reaction_pair.front(), reaction_pair.back(), time });
-	return rule{ reaction_pair.front(), reaction_pair.back(), time };
+ReactionRule vessel_t::operator()(const vector<vector<Reactant>> reaction_pair, double time) {
+	_rules.push_back(ReactionRule{ reaction_pair.front(), reaction_pair.back(), time });
+	return ReactionRule{ reaction_pair.front(), reaction_pair.back(), time };
 };
 
-rule vessel_t::operator()(const vector<vector<reactant>> reactio_input_output, const vector<reactant> catalyst, double time) {
-	_rules.push_back(rule{ reactio_input_output.front(), reactio_input_output.back(), catalyst, time });
-	return rule{ reactio_input_output.front(), reactio_input_output.back(), catalyst, time };
+ReactionRule vessel_t::operator()(const vector<vector<Reactant>> reactio_input_output, const vector<Reactant> catalyst, double time) {
+	_rules.push_back(ReactionRule{ reactio_input_output.front(), reactio_input_output.back(), catalyst, time });
+	return ReactionRule{ reactio_input_output.front(), reactio_input_output.back(), catalyst, time };
 }
-vector<reactant> vessel_t::getReactants() const
+vector<Reactant> vessel_t::getReactants() const
 {
 	return _reactants;
 }
-vector<rule>& vessel_t::getReactionRules()
+vector<ReactionRule>& vessel_t::getReactionRules()
 {
 	return _rules;
 }

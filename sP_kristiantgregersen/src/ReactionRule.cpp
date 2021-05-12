@@ -1,27 +1,27 @@
-#include "rule.h"
+#include "ReactionRule.h"
 #include <iostream>
 
-std::vector<reactant> const rule::getOutput()
+std::vector<Reactant> const ReactionRule::getOutput()
 {
 	return output_reactants;
 };
 
-std::vector<reactant>& rule::getCatalysts()
+std::vector<Reactant>& ReactionRule::getCatalysts()
 {
 	return catalysts;
 };
 
-std::vector<reactant>& rule::getInput()
+std::vector<Reactant>& ReactionRule::getInput()
 {
 	return input_reactants;
 };
 
-double& rule::getTime()
+double& ReactionRule::getTime()
 {
 	return time;
 };
 
-double rule::getDelay(int& quantity, double& time)
+double ReactionRule::getDelay(int& quantity, double& time)
 {
 	std::default_random_engine generator(std::chrono::system_clock::now().time_since_epoch().count());
 	double delay = quantity * time;

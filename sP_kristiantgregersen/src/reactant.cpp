@@ -1,13 +1,13 @@
 #include "reactant.h"
 
-std::string reactant::getIdentifier() const {
+std::string Reactant::getIdentifier() const {
 	return _identifier;
 };
 
-int reactant::getQuanitity() const {
+int Reactant::getQuanitity() const {
 	return _quantity;
 };
 
-void reactant::setQuantity(int quantity) {
+void Reactant::setQuantity(int quantity) {
 	_quantity = quantity;
 };

@@ -1,7 +1,7 @@
 #include "StochasticSimulator.h"
 #include "SystemStateMonitor.h"
 
-void StochasticSimulator::doMultithreadedStochaticSimulation(double& T, vector<reactant> state, vector<rule>& _rules, int& example, std::string& path, int& numberOfThreads)
+void StochasticSimulator::doMultithreadedStochaticSimulation(double& T, vector<Reactant> state, vector<ReactionRule>& _rules, int& example, std::string& path, int& numberOfThreads)
 {
 	vector<std::thread> threads;
 	for (auto i = 0; i < numberOfThreads; i++)
@@ -14,7 +14,7 @@ void StochasticSimulator::doMultithreadedStochaticSimulation(double& T, vector<r
 	}
 }
 
-void StochasticSimulator::doStochaticSimulation(double& T, vector<reactant> state, vector<rule>& _rules, int& example, std::string& path)
+void StochasticSimulator::doStochaticSimulation(double& T, vector<Reactant> state, vector<ReactionRule>& _rules, int& example, std::string& path)
 {
 	SystemStateMonitor<string> systemStateMonitor = SystemStateMonitor<string>{ "A" };
 	std::ofstream file;
@@ -34,7 +34,7 @@ void StochasticSimulator::doStochaticSimulation(double& T, vector<reactant> stat
 	double t = 0;
 	while (t <= T)
 	{
-		rule leastDelayRule;
+		ReactionRule leastDelayRule;
 		double leastDelay = 100000;
 
 		for (auto& rule : _rules) {
@@ -87,7 +87,7 @@ void StochasticSimulator::doStochaticSimulation(double& T, vector<reactant> stat
 	file.close();
 }
 
-bool StochasticSimulator::hasEnoughQuantities(vector<reactant>& input, vector<reactant>& state)
+bool StochasticSimulator::hasEnoughQuantities(vector<Reactant>& input, vector<Reactant>& state)
 {
 	bool isEnoughQuanity = true;
 	for (auto& ruleInput : input) {
@@ -98,7 +98,7 @@ bool StochasticSimulator::hasEnoughQuantities(vector<reactant>& input, vector<re
 	return isEnoughQuanity;
 }
 
-void StochasticSimulator::changeQuantity(string reactantId, vector<reactant>& state, int ruleQuantity)
+void StochasticSimulator::changeQuantity(string reactantId, vector<Reactant>& state, int ruleQuantity)
 {
 	for (auto& reactorState : state) {
 		bool isSameReactant = reactorState.getIdentifier() == reactantId;
@@ -109,7 +109,7 @@ void StochasticSimulator::changeQuantity(string reactantId, vector<reactant>& st
 	}
 }
 
-int StochasticSimulator::getQuantity(string reactantId, vector<reactant>& state)
+int StochasticSimulator::getQuantity(string reactantId, vector<Reactant>& state)
 {
 	for (auto& reactorState : state) {
 		bool isSameReactant = reactorState.getIdentifier() == reactantId;

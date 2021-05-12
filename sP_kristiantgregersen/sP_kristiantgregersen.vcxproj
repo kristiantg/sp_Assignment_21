@@ -141,7 +141,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\node.cpp" />
-    <ClCompile Include="src\rule.cpp" />
+    <ClCompile Include="src\ReactionRule.cpp" />
     <ClCompile Include="src\reactant.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\vessel_t.cpp" />
@@ -151,7 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\node.h" />
-    <ClInclude Include="src\rule.h" />
+    <ClInclude Include="src\ReactionRule.h" />
     <ClInclude Include="src\reactant.h" />
     <ClInclude Include="src\vessel_t.h" />
     <ClInclude Include="src\StochasticSimulator.h" />
