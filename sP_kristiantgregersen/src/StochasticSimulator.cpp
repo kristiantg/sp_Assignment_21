@@ -1,12 +1,12 @@
 #include "StochasticSimulator.h"
 #include "SystemStateMonitor.h"
 
-void StochasticSimulator::doMultithreadedStochaticSimulation(double& T, vector<Reactant> state, vector<ReactionRule>& _rules, int& example, std::string& path, int& numberOfThreads)
+void StochasticSimulator::doMultithreadedStochaticSimulation(double& T, vector<Reactant> state, vector<ReactionRule>& _rules, int& numberOfThreads)
 {
 	vector<std::thread> threads;
 	for (auto i = 0; i < numberOfThreads; i++)
 	{
-		threads.push_back(std::thread([&]() {doStochaticSimulation(T, state, _rules, example, path);}));
+		threads.push_back(std::thread([&]() {doStochaticSimulation(T, state, _rules);}));
 	}
 
 	for (auto& thread : threads) {
@@ -14,22 +14,16 @@ void StochasticSimulator::doMultithreadedStochaticSimulation(double& T, vector<R
 	}
 }
 
-void StochasticSimulator::doStochaticSimulation(double& T, vector<Reactant> state, vector<ReactionRule>& _rules, int& example, std::string& path)
+void StochasticSimulator::doStochaticSimulation(double& T, vector<Reactant> state, vector<ReactionRule>& _rules)
 {
-	SystemStateMonitor<string> systemStateMonitor = SystemStateMonitor<string>{ "A" };
-	std::ofstream file;
-	file.open(path);
-
-	if (file.is_open()) {
-		if (example == 2) {
-			file << "S,E,I,H,R,time\n";
-		}
-		else {
-			file << "A,C,R,time\n";
-		}
-	}
-
+	SystemStateMonitor<string> systemStateMonitor = SystemStateMonitor<string>{ getReactantToMonitor() };
 	vector<double> delays;
+	std::ofstream file;
+
+	file.open(getFilePath());
+	if (file.is_open()) {
+		file << getFileHeaders();
+	}
 
 	double t = 0;
 	while (t <= T)
@@ -69,22 +63,26 @@ void StochasticSimulator::doStochaticSimulation(double& T, vector<Reactant> stat
 			}
 		}
 
-		//monitorStateHelper
-		auto test = getQuantity("H", state);
-		systemStateMonitor.setCount(test);
-		std::cout << systemStateMonitor.getMean() << std::endl;
-		
-		if (file.is_open()) {
-			if (example == 2) {
-				file << getQuantity("S", state) << "," << getQuantity("E", state) << "," << getQuantity("I", state) << "," << getQuantity("H", state) << "," << getQuantity("R", state) << "," << t << "\n";
-			}
-			else {
-				file << getQuantity("A", state) << "," << getQuantity("C", state) << "," << getQuantity("R", state) << "," << t << "\n";
-			}
+		if (getToMonitor()) {
+			systemStateMonitor.setCount(getQuantity(getReactantToMonitor(), state));
+			std::cout << systemStateMonitor.getMean() << std::endl;
+			std::cout << systemStateMonitor.getMean() << std::endl;
 		}
-		//std::cout << "Time: " << t << "    A: " << getQuantity("A", state) << "    C: " << getQuantity("R", state) << "     R: " << getQuantity("R", state) << std::endl;
+
+		printTrajectory(state, t, file);
 	}
 	file.close();
+}
+
+void StochasticSimulator::printTrajectory(vector<Reactant>& state, double& t, std::ofstream& file) {
+	if (file.is_open()) {
+		if (exampleFlag == 2) {
+			file << getQuantity("S", state) << "," << getQuantity("E", state) << "," << getQuantity("I", state) << "," << getQuantity("H", state) << "," << getQuantity("R", state) << "," << t << "\n";
+		}
+		else {
+			file << getQuantity("A", state) << "," << getQuantity("C", state) << "," << getQuantity("R", state) << "," << t << "\n";
+		}
+	}
 }
 
 bool StochasticSimulator::hasEnoughQuantities(vector<Reactant>& input, vector<Reactant>& state)
@@ -119,4 +117,29 @@ int StochasticSimulator::getQuantity(string reactantId, vector<Reactant>& state)
 		}
 	}
 	return 0;
+}
+
+string StochasticSimulator::getFilePath()
+{
+	return filePath;
+}
+
+string StochasticSimulator::getFileHeaders()
+{
+	return fileHeaders;
+}
+
+string StochasticSimulator::getReactantToMonitor()
+{
+	return reactantIdToMonitor;
+}
+
+int StochasticSimulator::getExampleFlag()
+{
+	return exampleFlag;
+}
+
+bool StochasticSimulator::getToMonitor()
+{
+	return willMonitorSystem;
 }

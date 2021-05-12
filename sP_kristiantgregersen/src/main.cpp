@@ -6,6 +6,35 @@
 #include "SymbolTable.h"
 #include "SystemStateMonitor.h"
 
+
+// Timer for testing implemented - Resource acquisition is initialization (RAII)
+class Timer {
+public:
+    Timer() {
+        m_StartTimepoint = std::chrono::high_resolution_clock::now();
+    }
+
+    ~Timer() {
+        Stop();
+    }
+
+    void Stop() {
+        auto endTimepoint = std::chrono::high_resolution_clock::now();
+
+        auto start = std::chrono::time_point_cast<std::chrono::microseconds>(m_StartTimepoint).time_since_epoch().count();
+        auto end = std::chrono::time_point_cast<std::chrono::microseconds>(endTimepoint).time_since_epoch().count();
+
+        auto duration = end - start;
+        double ms = duration * 0.001;
+
+        std::cout << duration << "us\n";
+        std::cout << ms << "ms\n";
+    }
+
+private:
+    std::chrono::time_point<std::chrono::high_resolution_clock> m_StartTimepoint;
+};
+
 vessel_t seihr(uint32_t N)
 {
     auto v = vessel_t{};
@@ -125,33 +154,6 @@ vessel_t circadian_oscillator2() {
     v(MR >>= env, deltaMR);
     return v;
 }
-// Timer for testing implemented - Resource acquisition is initialization (RAII)
-class Timer {
-public:
-    Timer() {
-        m_StartTimepoint = std::chrono::high_resolution_clock::now();
-    }
-
-    ~Timer() {
-        Stop();
-    }
-
-    void Stop() {
-        auto endTimepoint = std::chrono::high_resolution_clock::now();
-
-        auto start = std::chrono::time_point_cast<std::chrono::microseconds>(m_StartTimepoint).time_since_epoch().count();
-        auto end = std::chrono::time_point_cast<std::chrono::microseconds>(endTimepoint).time_since_epoch().count();
-
-        auto duration = end - start;
-        double ms = duration * 0.001;
-
-        std::cout << duration << "us\n";
-        std::cout << ms << "ms\n";
-    }
-
-private:
-    std::chrono::time_point<std::chrono::high_resolution_clock> m_StartTimepoint;
-};
 
 int main() 
 { 
@@ -179,23 +181,20 @@ int main()
     // Test for building graph.
     std::cout << tester.buildReactionGraph() << std::endl;
     {
-        StochasticSimulator simulator;
         Timer timer;
+        std::string monitorId = "H";
+        StochasticSimulator simulator{ monitorId, "C:/Users/kristiantg/Documents/GitHub/sP_assignment/test.csv", "S,E,I,H,R,time\n", seihr, false };
         double time = 100;
-        int flag = 2;
-        int threads = 2;
-        std::string filePath = "C:/Users/kristiantg/Documents/GitHub/sP_assignment/test.csv";
-        simulator.doMultithreadedStochaticSimulation(time, tester.getReactants(), tester.getReactionRules(), flag, filePath, threads);
+        int numberOfThreads = 2;
+        simulator.doMultithreadedStochaticSimulation(time, tester.getReactants(), tester.getReactionRules(), numberOfThreads);
     }
     std::cout << std::endl;
     {
-        double time = 100;
-        int flag = 2;
-        std::string filePath = "C:/Users/kristiantg/Documents/GitHub/sP_assignment/test.csv";
-        StochasticSimulator simulator;
         Timer timer;
-        simulator.doStochaticSimulation(time, tester.getReactants(), tester.getReactionRules(), flag, filePath);
-        std::cout << "program finished" << std::endl;
+        std::string monitorId = "H";
+        StochasticSimulator simulator{ monitorId, "C:/Users/kristiantg/Documents/GitHub/sP_assignment/test.csv", "S,E,I,H,R,time\n", seihr, false };
+        double time = 100;
+        simulator.doStochaticSimulation(time, tester.getReactants(), tester.getReactionRules());
     }
     return 0;
 }
